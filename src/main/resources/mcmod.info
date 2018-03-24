@@ -1,0 +1,17 @@
+[
+{
+  "modid": "cdmcalculator",
+  "name": "CalculatorPlus",
+  "description": "A Calculator app for MrCrayfish Device Mod",
+  "version": "2.3",
+  "mcversion": "1.12.2",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["TyrellPlayz"],
+  "credits": "The creators of the exp4j library: https://lallafa.objecthunter.net/exp4j/",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": [],
+  "parent" : "cdm"
+}
+]

@@ -1,0 +1,16 @@
+{
+    "name": "CalculatorPlus",
+    "author": "TyrellPlayz",
+    "description": "A calculator app for MrCrayfish's Device Mod",
+    "version": "2.3",
+	"icon": "cdmcalculator:textures/app/icon/calculator_app.png",
+    "screenshots": [
+        "https://i.imgur.com/7pE8RN4.png",
+        "https://i.imgur.com/VixOQUV.png",
+        "https://i.imgur.com/5vWW5lb.png"
+    ],
+	"support": {
+		"twitter": "https://twitter.com/realtyrellplayz",
+		"youtube": "https://youtube.com/legotyrell"
+	}
+}
