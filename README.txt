@@ -1,8 +1,12 @@
 -------------------------------------------
 NOTE: I am not the creator of the exp4j library
 For information about please visit this site:
+
 https://lallafa.objecthunter.net/exp4j
 
+Or its GitHub:
+
+https://github.com/fasseg/exp4j
 
 Sourceinstallation information for modders
 -------------------------------------------
