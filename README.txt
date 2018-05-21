@@ -1,5 +1,11 @@
 -------------------------------------------
-Source installation information for modders
+NOTE: I am not the creator of the exp4j library
+For information about please visit this site:
+https://lallafa.objecthunter.net/exp4j
+Or its GitHub:
+https://github.com/fasseg/exp4j
+
+Sourceinstallation information for modders
 -------------------------------------------
 This code follows the Minecraft Forge installation methodology. It will apply
 some small patches to the vanilla MCP source code, giving you and it access 
@@ -25,7 +31,7 @@ Step 3: After all that finished, you're left with a choice.
 For eclipse, run "gradlew eclipse" (./gradlew eclipse if you are on Mac/Linux)
 
 If you preffer to use IntelliJ, steps are a little different.
-1. Open IDEA, and import project.
+1. Open IDEA, and import projec
 2. Select your build.gradle file and have it import.
 3. Once it's finished you must close IntelliJ and run the following command:
 
