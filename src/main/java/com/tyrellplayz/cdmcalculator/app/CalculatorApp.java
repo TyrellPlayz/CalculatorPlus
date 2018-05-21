@@ -15,6 +15,7 @@ import com.mrcrayfish.device.api.app.component.Label;
 import com.mrcrayfish.device.api.app.component.Text;
 import com.mrcrayfish.device.api.app.component.TextArea;
 import com.mrcrayfish.device.api.app.component.TextField;
+import com.mrcrayfish.device.api.app.listener.ClickListener;
 import com.mrcrayfish.device.core.Laptop;
 import com.tyrellplayz.cdmcalculator.Reference;
 
@@ -32,7 +33,8 @@ public class CalculatorApp extends Application{
 	
 	private TextField textField_resultNor;
 	private TextField textField_resultAdv;
-	
+
+	// Normal Mode
 	private Button button_numberZero;
 	
 	private Button button_add;
@@ -45,7 +47,7 @@ public class CalculatorApp extends Application{
 	private Button button_clear;
 	private Button button_backspace;
 	
-	// Advance
+	// Advance Mode
 	private Button button_square;
 	private Button button_sqrt;
 	private Button button_abs;
@@ -56,23 +58,29 @@ public class CalculatorApp extends Application{
 	private Button button_modulo;
 	private Button button_openBracket;
 	private Button button_closedBracket;
-	
+
+	// Layouts
 	private Layout layout_normal;
 	private Layout layout_advance;
 	private Layout layout_info;
 	private Layout layout_history;
-	
+
+	// History
 	private TextArea textArea_history;
 	private Button button_clearHistory;
 	private Button button_refreshHistory;
 	private Button button_saveHistory;
 	private Button button_loadHistory;
-	
+
 	private List<String> history = new ArrayList<>();
 	public void setHistory(List<String> history) {this.history = history;}
 	public List<String> getHistory() {return history;}
 	public void addHistory(String calculation) {history.add(calculation);}
-	
+
+	private Button normal_mode;
+	private Button advance_mode;
+	private Button history_mode;
+
 	private Button button_back;
 	
 	private Label label_author;
@@ -84,13 +92,9 @@ public class CalculatorApp extends Application{
 	 * n = normal, a = advance
 	 */
 	private String mode = "n";
-	
-	public CalculatorApp() {
-		
-	}
 
 	@Override
-	public void init() {
+	public void init(NBTTagCompound tag) {
 		
 		layout_normal = new Layout(100, 120);
 		layout_advance = new Layout(197, 120);
@@ -110,37 +114,44 @@ public class CalculatorApp extends Application{
 		layout_normal.addComponent(button_info);
 		layout_advance.addComponent(button_info);
 		layout_history.addComponent(button_info);
-		
-		String[] modes = {"Normal", "Advance", "History"};
-		comboBox_modePicker = new ComboBox.List<>(2, 3, modes);
-		comboBox_modePicker.setChangeListener((oldValue, newValue) -> {
-			if(newValue != oldValue) {
-				if(newValue.equals("Normal")) {
-					this.setCurrentLayout(layout_normal);
-					textField_resultNor.clear();
-					textField_resultAdv.clear();
-					mode = "n";
-				}
-				if(newValue.equals("Advance")) {
-					this.setCurrentLayout(layout_advance);
-					textField_resultNor.clear();
-					textField_resultAdv.clear();
-					mode = "a";
-				}
-				if(newValue.equals("History")) {
-					this.setCurrentLayout(layout_history);
-					textField_resultNor.clear();
-					textField_resultAdv.clear();
-					mode = "h";
-				}
-			}
 
+		normal_mode = new Button(2, 2, Icons.ONLINE);
+		normal_mode.setToolTip("Normal","For every day calculations");
+		normal_mode.setClickListener((mouseX, mouseY, mouseButton) -> {
+			this.setCurrentLayout(layout_normal);
+			textField_resultNor.clear();
+			textField_resultAdv.clear();
+			mode = "n";
+        });
+
+		advance_mode = new Button(20, 2, Icons.LIVE);
+		advance_mode.setToolTip("Advance","For advance calculations");
+		advance_mode.setClickListener((mouseX, mouseY, mouseButton) -> {
+			this.setCurrentLayout(layout_advance);
+			textField_resultNor.clear();
+			textField_resultAdv.clear();
+			mode = "a";
 		});
-		
-		layout_normal.addComponent(comboBox_modePicker);
-		layout_advance.addComponent(comboBox_modePicker);
-		layout_history.addComponent(comboBox_modePicker);
-		
+
+		history_mode = new Button(38, 2, Icons.BOOK_CLOSED);
+		history_mode.setToolTip("History","View last calculations");
+		history_mode.setClickListener((mouseX, mouseY, mouseButton) -> {
+			this.setCurrentLayout(layout_history);
+			textField_resultNor.clear();
+			textField_resultAdv.clear();
+			mode = "h";
+		});
+
+		layout_normal.addComponent(normal_mode);
+		layout_normal.addComponent(advance_mode);
+		layout_normal.addComponent(history_mode);
+		layout_advance.addComponent(normal_mode);
+		layout_advance.addComponent(advance_mode);
+		layout_advance.addComponent(history_mode);
+		layout_history.addComponent(normal_mode);
+		layout_history.addComponent(advance_mode);
+		layout_history.addComponent(history_mode);
+
 		this.setCurrentLayout(layout_normal);
 	}
 	
@@ -276,14 +287,9 @@ public class CalculatorApp extends Application{
 				try {
 					Expression e = new ExpressionBuilder(calculation).build();
 					result = String.valueOf(e.evaluate());
-					if(calculation.equals(null) || calculation == null) {
-						setText("ERROR", textField_resultNor);
-						setText("ERROR", textField_resultAdv);
-					}else {
-						addHistory(calculation + " = " + result);
-						setText(result, textField_resultNor);
-						setText(result, textField_resultAdv);
-					}
+					addHistory(calculation + " = " + result);
+					setText(result, textField_resultNor);
+					setText(result, textField_resultAdv);
 				}catch (Exception e) {
 					setText("ERROR", textField_resultNor);
 					setText("ERROR", textField_resultAdv);
@@ -506,7 +512,11 @@ public class CalculatorApp extends Application{
 		layout_history.addComponent(textArea_history);
 
 	}
-	
+
+	/*
+		Useful Methods
+	 */
+
 	public void addNumberClickListener(Button btn, final int number) {
 		btn.setClickListener((mouseX, mouseY, mouseButton) ->{ 
 			if(mouseButton == 0){
@@ -546,7 +556,11 @@ public class CalculatorApp extends Application{
 			}
 		}
 	}
-	
+
+	/*
+	Saving data
+	 */
+
 	public void writeText(String text) {
 		if(textField_resultNor.getText().equals("ERROR") || textField_resultNor.getText().equals(result)) {
 			textField_resultNor.clear();
